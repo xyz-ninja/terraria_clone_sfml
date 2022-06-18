@@ -40,7 +40,7 @@ namespace TerrariaCloneV2
 				case TILE_TYPE.GROUND:
 
 					rectShape.Texture = Content.texTiles0;
-					
+
 					break;
 
 				case TILE_TYPE.GRASS:
@@ -50,13 +50,14 @@ namespace TerrariaCloneV2
 					break;
 			}
 
-			rectShape.TextureRect = GetTextureRect(0, 0);
+			// получаем тайл из текстуры по ряду и столбцу
+			rectShape.TextureRect = GetTextureRect(1, 1); 
 		}
 
 		public IntRect GetTextureRect(int i, int j) {
 
-			int x = i * TILE_SIZE;
-			int y = j * TILE_SIZE;
+			int x = i * TILE_SIZE + i;
+			int y = j * TILE_SIZE + j;
 
 			return new IntRect(x, y, TILE_SIZE, TILE_SIZE);
 		}

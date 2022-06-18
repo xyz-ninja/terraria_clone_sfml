@@ -13,6 +13,8 @@ namespace TerrariaCloneV2
 
 		public Game() {
 			world = new World();
+
+			world.GenerateWorld();
 		}
 
 		public void Update() {

@@ -21,9 +21,14 @@ namespace TerrariaCloneV2
 				chunks[i] = new Chunk[WORLD_SIZE];
 			}
 
+			
+		}
+
+		public void GenerateWorld() {
+
 			for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {
 				for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
-					
+
 					SetTile(TILE_TYPE.GROUND, x, y);
 				}
 			}
@@ -55,6 +60,8 @@ namespace TerrariaCloneV2
 
 			return chunks[X][Y];
 		}
+
+		// позиция тайла внутри чанка
 		public Vector2i GetTilePositionInChunk(int x, int y) {
 
 			int X = x / Chunk.CHUNK_SIZE;
