@@ -50,9 +50,7 @@ namespace TerrariaCloneV2
 					break;
 			}
 
-
-
-			rectShape.TextureRect = new IntRect(0, 0, TILE_SIZE, TILE_SIZE);
+			rectShape.TextureRect = GetTextureRect(0, 0);
 		}
 
 		public IntRect GetTextureRect(int i, int j) {

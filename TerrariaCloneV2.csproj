@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <Configurations>Release;Debug</Configurations>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="sfml-audio">
+      <HintPath>C:\Users\User\OneDrive\Рабочий стол\stuff\SFML.Net-2.4\lib\sfml-audio.dll</HintPath>
+    </Reference>
+    <Reference Include="sfml-graphics">
+      <HintPath>C:\Users\User\OneDrive\Рабочий стол\stuff\SFML.Net-2.4\lib\sfml-graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="sfml-system">
+      <HintPath>C:\Users\User\OneDrive\Рабочий стол\stuff\SFML.Net-2.4\lib\sfml-system.dll</HintPath>
+    </Reference>
+    <Reference Include="sfml-window">
+      <HintPath>C:\Users\User\OneDrive\Рабочий стол\stuff\SFML.Net-2.4\lib\sfml-window.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
