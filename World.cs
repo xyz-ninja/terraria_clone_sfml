@@ -21,32 +21,43 @@ namespace TerrariaCloneV2
 				chunks[i] = new Chunk[WORLD_SIZE];
 			}
 
-			
 		}
 
 		public void GenerateWorld() {
 
-			for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {
-				for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
+			for (int x = 2; x < 5; x++) {
+				for (int y = 2; y < 5; y++) {
 
-					SetTile(TILE_TYPE.GROUND, x, y);
-				}
-			}
-
-			for (int x = Chunk.CHUNK_SIZE; x < Chunk.CHUNK_SIZE * 2; x++) {
-				for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
-
-					SetTile(TILE_TYPE.GRASS, x, y);
+					CreateTile(TILE_TYPE.GROUND, x, y);
 				}
 			}
 		}
 
-		public void SetTile(TILE_TYPE type, int x, int y) {
+		public void CreateTile(TILE_TYPE type, int x, int y) {
 			
 			var chunk = GetChunk(x, y);
 			var tilePos = GetTilePositionInChunk(x, y);
 
-			chunk.SetTile(type, tilePos.X, tilePos.Y);
+			var tile = chunk.CreateTile(type, tilePos.X, tilePos.Y);
+
+			Tile upTile = GetTile(x, y - 1);
+			Tile downTile = GetTile(x, y + 1);
+			Tile leftTile = GetTile(x - 1, y);
+			Tile rightTile = GetTile(x + 1, y);
+
+			tile.SetAroundTiles(upTile, downTile, leftTile, rightTile);
+		}
+
+		public Tile GetTile(int x, int y) {
+			var chunk = GetChunk(x, y);
+			
+			if (chunk == null) {
+				return null; 
+			}
+			
+			var tilePos = GetTilePositionInChunk(x, y);
+
+			return chunk.GetTile(tilePos.X, tilePos.Y);
 		}
 
 		public Chunk GetChunk(int x, int y) {
@@ -61,7 +72,7 @@ namespace TerrariaCloneV2
 			return chunks[X][Y];
 		}
 
-		// позиция тайла внутри чанка
+		// позиция тайла в массиве чанка
 		public Vector2i GetTilePositionInChunk(int x, int y) {
 
 			int X = x / Chunk.CHUNK_SIZE;

@@ -12,7 +12,7 @@ namespace TerrariaCloneV2
 
 		public const int CHUNK_SIZE = 25;
 
-		private Vector2i chunkPosition;
+		private Vector2i chunkPosition; // позиция чанка в массиве мира
 
 		private Tile[][] tiles;
 
@@ -32,12 +32,24 @@ namespace TerrariaCloneV2
 			}
 		}
 
-		public void SetTile(TILE_TYPE type, int x, int y) {
+		public Tile CreateTile(TILE_TYPE type, int x, int y) {
 
 			tiles[x][y] = new Tile(type);
 			
 			var tile = tiles[x][y];
 			tile.Position = new Vector2f(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
+
+			return tile;
+		}
+
+		public Tile GetTile(int x, int y) {
+
+			if (x < 0 || y < 0 || x > CHUNK_SIZE - 1 || y > CHUNK_SIZE - 1) {
+				return null;
+			}
+
+			// возвращаем плитку, она все ещё может быть null
+			return tiles[x][y];
 		}
 
 		public void Draw(RenderTarget target, RenderStates states) {
