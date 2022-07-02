@@ -25,10 +25,11 @@ namespace TerrariaCloneV2
 
 		public void GenerateWorld() {
 
-			for (int x = 2; x < 8; x++) {
-				for (int y = 2; y < 4; y++) {
+			for (int x = 2; x < 10; x++) {
+				for (int y = 2; y < 7; y++) {
 
-					CreateTile(TILE_TYPE.GROUND, x, y);
+					//CreateTile(TILE_TYPE.GROUND, x, y);
+					CreateTile(TILE_TYPE.GRASS, x, y);
 				}
 			}
 		}
