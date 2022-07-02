@@ -9,6 +9,7 @@ namespace TerrariaCloneV2
 
 		public static RenderWindow RenderWindow { get { return win; } }
 		public static Game Game { private set; get; }
+		public static Random Rand { private set; get; }
 
 		static void Main(string[] args) {
 
@@ -20,6 +21,7 @@ namespace TerrariaCloneV2
 
 			Content.Load();
 
+			Rand = new Random();
 			Game = new Game();
 
 			while (win.IsOpen) {

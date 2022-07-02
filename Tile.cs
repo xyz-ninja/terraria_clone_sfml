@@ -2,6 +2,7 @@
 using SFML.System;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,10 +27,15 @@ namespace TerrariaCloneV2
 		private Tile leftTile;
 		private Tile rightTile;
 
-		#region getters
+		#region getters/setters
 		
 		public TILE_TYPE TileType => tileType;
-		
+
+		public Tile UpTile { get => upTile; set { upTile = value; UpdateVisual(); } }
+		public Tile DownTile { get => downTile; set { downTile = value; UpdateVisual(); } }
+		public Tile LeftTile { get => leftTile; set { leftTile = value; UpdateVisual(); } }
+		public Tile RightTile { get => rightTile; set { rightTile = value; UpdateVisual(); } }
+
 		#endregion
 
 		public Tile(TILE_TYPE type) {
@@ -56,20 +62,88 @@ namespace TerrariaCloneV2
 					break;
 			}
 
-			// получаем тайл из текстуры по ряду и столбцу
-			rectShape.TextureRect = GetTextureRect(1, 1);
 		}
 
 		// обновляет внешний вид тайла в зависимости от соседей
+		// attention: мега всратый код
 		public void UpdateVisual() {
 
+			
+
+			var targetRect = new IntRect();
+
+			// если тайл окружен
+			if (upTile != null && downTile != null && leftTile != null && rightTile != null) {
+
+				int i = Program.Rand.Next(0, 3); // случайное число от 0 до 2
+				targetRect = GetTextureRect(1 + i, 1);
+
+			// если у тайла отсутствуют все соседи
+			} else if (upTile == null && downTile == null && leftTile == null && rightTile == null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(9 + i, 3);
+
+			// ВЕРТИКАЛЬНЫЕ
+			// если у тайла отсутствует только верхний сосед
+			} else if (upTile == null && downTile != null && leftTile != null && rightTile != null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(1 + i, 0);
+
+			// если у тайла отсутствует только нижний сосед
+			} else if (upTile != null && downTile == null && leftTile != null && rightTile != null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(1 + i, 2);
+
+			// ГОРИЗОНТАЛЬНЫЕ
+			// если у тайла отсутствует только левый сосед
+			} else if (upTile != null && downTile != null && leftTile == null && rightTile != null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(0, i);
+
+			// если у тайла отсутствует только правый сосед
+			} else if (upTile != null && downTile != null && leftTile != null && rightTile == null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(4, i);
+
+			// ДИАГОНАЛЬНЫЕ
+			// если у тайла отсутствует верхний и левый сосед
+			} else if (upTile == null && downTile != null && leftTile == null && rightTile != null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(0 + i * 2, 3);
+
+			// если у тайла отсутствует верхний и правый сосед
+			} else if (upTile == null && downTile != null && leftTile != null && rightTile == null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(1 + i * 2, 3);
+
+			// если у тайла отсутствует нижний и левый сосед
+			} else if (upTile != null && downTile == null && leftTile == null && rightTile != null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(0 + i * 2, 4);
+
+			// если у тайла отсутствует нижний и правый сосед
+			} else if (upTile != null && downTile == null && leftTile != null && rightTile == null) {
+				int i = Program.Rand.Next(0, 3);
+				targetRect = GetTextureRect(1 + i * 2, 4);
+
+			} else  {
+
+				Debug.Print("Missing tile rect");
+
+				int i = Program.Rand.Next(0, 3);
+
+				targetRect = GetTextureRect(1 + i, 1);
+			}
+
+			// получаем тайл из текстуры по ряду и столбцу
+			rectShape.TextureRect = targetRect;
 		}
 
 		// получаем фрагмент текстуры
 		public IntRect GetTextureRect(int i, int j) {
 
-			int x = i * TILE_SIZE + i;
-			int y = j * TILE_SIZE + j;
+			int x = i * TILE_SIZE + i * 2; // очень странная штука
+			int y = j * TILE_SIZE + j * 2;
 
 			return new IntRect(x, y, TILE_SIZE, TILE_SIZE);
 		}
@@ -78,22 +152,22 @@ namespace TerrariaCloneV2
 
 			if (upTile != null) {
 				this.upTile = upTile;
-				this.upTile.downTile = this;
+				this.upTile.DownTile = this;
 			}
 
 			if (downTile != null) {
 				this.downTile = downTile;
-				this.downTile.upTile = this;
+				this.downTile.UpTile = this;
 			}
 
 			if (leftTile != null) {
 				this.leftTile = leftTile;
-				this.leftTile.rightTile = this;
+				this.leftTile.RightTile = this;
 			}
 
 			if (rightTile != null) {
 				this.rightTile = rightTile;
-				this.rightTile.leftTile = this;
+				this.rightTile.LeftTile = this;
 			}
 
 			UpdateVisual();
