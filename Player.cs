@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SFML.Window;
 
 namespace TerrariaCloneV2
 {
@@ -17,8 +18,32 @@ namespace TerrariaCloneV2
 		private RectangleShape rectDirection;
 
 		private Vector2f velocity;
+		private Vector2f movement; // вектор перемещения игрока
+
+		private float horizontalSpeed = 4f;
+		private float horizontalSpeedAcceleration = 0.2f;
 
 		private Vector2f startPosition;
+
+		#region getters/setters
+
+		public int Direction {
+			set {
+
+				int dir = value >= 0 ? 1 : -1;
+				
+				Scale = new Vector2f(dir, 1);
+			}
+
+			get {
+
+				int dir = Scale.X >= 0 ? 1 : -1;
+
+				return dir;
+			}
+		}
+
+		#endregion
 
 		public Player(World world) {
 
@@ -44,6 +69,7 @@ namespace TerrariaCloneV2
 		public void Update() {
 
 			UpdatePhysics();
+			UpdateMovement();
 
 			Position += velocity;
 		}
@@ -54,14 +80,19 @@ namespace TerrariaCloneV2
 
 			velocity += new Vector2f(0, 0.15f);
 
+			// ищем тайл игрока
+			
 			int pX = (int)((Position.X - rect.Origin.X + rect.Size.X / 2) / Tile.TILE_SIZE);
 			int pY = (int)((Position.Y + rect.Size.Y) / Tile.TILE_SIZE);
 
 			Tile tile = world.GetTile(pX, pY);
 
 			if (tile != null) {
+
 				Vector2f nextPosition = Position + velocity - rect.Origin;
 				
+				// проверяем коллизию с тайлом
+
 				FloatRect playerRect = new FloatRect(nextPosition, rect.Size);
 				FloatRect tileRect = new FloatRect(
 					tile.Position,
@@ -73,6 +104,27 @@ namespace TerrariaCloneV2
 
 			if (!isFall) {
 				velocity.Y = 0;
+			}
+		}
+
+		private void UpdateMovement() {
+
+			bool isMoveLeft = Keyboard.IsKeyPressed(Keyboard.Key.A);
+			bool isMoveRight = Keyboard.IsKeyPressed(Keyboard.Key.D);
+
+			bool isMove = isMoveLeft || isMoveRight;
+
+			if (isMove) {
+				if (isMoveLeft) {
+				
+					movement.X = -horizontalSpeedAcceleration;
+					Direction = -1;
+				
+				} else if (isMoveRight) {
+
+					movement.X = horizontalSpeedAcceleration;
+					Direction = 1;
+				}
 			}
 		}
 
