@@ -20,16 +20,23 @@ namespace TerrariaCloneV2
 			for (int i = 0; i < WORLD_SIZE; i++) {
 				chunks[i] = new Chunk[WORLD_SIZE];
 			}
-
 		}
 
 		public void GenerateWorld() {
 
-			for (int x = 2; x < 10; x++) {
-				for (int y = 2; y < 7; y++) {
+			// трава
+			for (int x = 0; x < 50; x++) {
+				for (int y = 17; y <= 17; y++) {
 
-					//CreateTile(TILE_TYPE.GROUND, x, y);
 					CreateTile(TILE_TYPE.GRASS, x, y);
+				}
+			}
+
+			// земля
+			for (int x = 0; x < 50; x++) {
+				for (int y = 18; y <= 32; y++) {
+
+					CreateTile(TILE_TYPE.GROUND, x, y);
 				}
 			}
 		}

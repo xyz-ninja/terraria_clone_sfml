@@ -61,14 +61,11 @@ namespace TerrariaCloneV2
 					
 					break;
 			}
-
 		}
 
 		// обновляет внешний вид тайла в зависимости от соседей
 		// attention: мега всратый код
 		public void UpdateVisual() {
-
-			
 
 			var targetRect = new IntRect();
 
