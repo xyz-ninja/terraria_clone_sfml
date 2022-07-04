@@ -1,4 +1,5 @@
 ﻿using SFML.System;
+using System.Collections.Generic;
 using TerrariaCloneV2.Entities;
 
 namespace TerrariaCloneV2
@@ -7,7 +8,8 @@ namespace TerrariaCloneV2
 	{
 		private World world;
 		private Player player;
-		private NpcSlime npcSlime;
+
+		private List<NpcSlime> slimes = new List<NpcSlime>();
 
 		public Game() {
 			
@@ -19,9 +21,15 @@ namespace TerrariaCloneV2
 			player = new Player(world);
 			player.Spawn(new Vector2f(300, 150));
 
-			// создаём слизня
-			npcSlime = new NpcSlime(world);
-			npcSlime.Spawn(new Vector2f(500, 150));
+			for (int i = 0; i < 20; i++) {
+				var slime = new NpcSlime(world);
+
+				slime.Direction = Program.Rand.Next(0, 2) == 0 ? 1 : -1;
+
+				slime.Spawn(new Vector2f(Program.Rand.Next(150, 600), 150));
+
+				slimes.Add(slime);
+			}
 
 			DebugRenderer.Enabled = true;
 		}
@@ -29,15 +37,21 @@ namespace TerrariaCloneV2
 		public void Update() {
 			
 			player.Update();
-			npcSlime.Update();
+
+			foreach (var slime in slimes) {
+				slime.Update();
+			}
 		}
 
 		public void Draw() {
 
 			Program.RenderWindow.Draw(world);
 			Program.RenderWindow.Draw(player);
-			Program.RenderWindow.Draw(npcSlime);
 
+			foreach (var slime in slimes) {
+				Program.RenderWindow.Draw(slime);
+			}
+			
 			DebugRenderer.Draw(Program.RenderWindow);
 		}
 	}

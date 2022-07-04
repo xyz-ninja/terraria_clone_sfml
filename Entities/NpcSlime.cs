@@ -22,7 +22,7 @@ namespace TerrariaCloneV2.Entities
 
 		public override void UpdateEntity() {
 			if (isFly == false) {
-				velocity = new Vector2f(Direction * 10, -7);
+				velocity = new Vector2f(Direction * Program.Rand.Next(1, 10), -Program.Rand.Next(6, 9));
 			}
 		}
 

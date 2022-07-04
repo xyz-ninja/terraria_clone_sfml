@@ -29,7 +29,7 @@ namespace TerrariaCloneV2
 
 		public override void OnWallCollided() {
 
-			Debug.Print("Collided");
+			//Debug.Print("Collided");
 
 			//throw new NotImplementedException();
 		}
