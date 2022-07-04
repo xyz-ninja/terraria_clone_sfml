@@ -18,6 +18,9 @@ namespace TerrariaCloneV2.Entities
 
 		public override void OnWallCollided() {
 			Direction *= -1;
+
+			// третий закон Ньютона
+			velocity = new Vector2f(-velocity.X, velocity.Y);
 		}
 
 		public override void UpdateEntity() {

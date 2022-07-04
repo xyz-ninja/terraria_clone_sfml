@@ -135,14 +135,14 @@ namespace TerrariaCloneV2.Entities
 						Position = new Vector2f((tileRect.Left + tileRect.Width) + entityRect.Width / 2, Position.Y);
 
 						movement.X = 0;
-						velocity.X = 0;
+						//velocity.X = 0;
 
 					} else if (offset.X < 0) {
 
 						Position = new Vector2f(tileRect.Left - entityRect.Width / 2, Position.Y);
 
 						movement.X = 0;
-						velocity.X = 0;
+						//velocity.X = 0;
 					}
 
 					OnWallCollided();

@@ -15,6 +15,7 @@ namespace TerrariaCloneV2
 		private TILE_TYPE tileType = TILE_TYPE.GROUND;
 
 		private RectangleShape rectShape;
+		private SpriteSheet spriteSheet;
 
 		// соседние тайлы
 		private Tile upTile;
@@ -56,6 +57,8 @@ namespace TerrariaCloneV2
 					
 					break;
 			}
+
+			spriteSheet = new SpriteSheet(TILE_SIZE, TILE_SIZE, 1);
 		}
 
 		// обновляет внешний вид тайла в зависимости от соседей
@@ -68,55 +71,55 @@ namespace TerrariaCloneV2
 			if (upTile != null && downTile != null && leftTile != null && rightTile != null) {
 
 				int i = Program.Rand.Next(0, 3); // случайное число от 0 до 2
-				targetRect = GetTextureRect(1 + i, 1);
+				targetRect = spriteSheet.GetTextureRect(1 + i, 1);
 
 			// если у тайла отсутствуют все соседи
 			} else if (upTile == null && downTile == null && leftTile == null && rightTile == null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(9 + i, 3);
+				targetRect = spriteSheet.GetTextureRect(9 + i, 3);
 
 			// ВЕРТИКАЛЬНЫЕ
 			// если у тайла отсутствует только верхний сосед
 			} else if (upTile == null && downTile != null && leftTile != null && rightTile != null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(1 + i, 0);
+				targetRect = spriteSheet.GetTextureRect(1 + i, 0);
 
 			// если у тайла отсутствует только нижний сосед
 			} else if (upTile != null && downTile == null && leftTile != null && rightTile != null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(1 + i, 2);
+				targetRect = spriteSheet.GetTextureRect(1 + i, 2);
 
 			// ГОРИЗОНТАЛЬНЫЕ
 			// если у тайла отсутствует только левый сосед
 			} else if (upTile != null && downTile != null && leftTile == null && rightTile != null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(0, i);
+				targetRect = spriteSheet.GetTextureRect(0, i);
 
 			// если у тайла отсутствует только правый сосед
 			} else if (upTile != null && downTile != null && leftTile != null && rightTile == null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(4, i);
+				targetRect = spriteSheet.GetTextureRect(4, i);
 
 			// ДИАГОНАЛЬНЫЕ
 			// если у тайла отсутствует верхний и левый сосед
 			} else if (upTile == null && downTile != null && leftTile == null && rightTile != null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(0 + i * 2, 3);
+				targetRect = spriteSheet.GetTextureRect(0 + i * 2, 3);
 
 			// если у тайла отсутствует верхний и правый сосед
 			} else if (upTile == null && downTile != null && leftTile != null && rightTile == null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(1 + i * 2, 3);
+				targetRect = spriteSheet.GetTextureRect(1 + i * 2, 3);
 
 			// если у тайла отсутствует нижний и левый сосед
 			} else if (upTile != null && downTile == null && leftTile == null && rightTile != null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(0 + i * 2, 4);
+				targetRect = spriteSheet.GetTextureRect(0 + i * 2, 4);
 
 			// если у тайла отсутствует нижний и правый сосед
 			} else if (upTile != null && downTile == null && leftTile != null && rightTile == null) {
 				int i = Program.Rand.Next(0, 3);
-				targetRect = GetTextureRect(1 + i * 2, 4);
+				targetRect = spriteSheet.GetTextureRect(1 + i * 2, 4);
 
 			} else  {
 
@@ -124,20 +127,11 @@ namespace TerrariaCloneV2
 
 				int i = Program.Rand.Next(0, 3);
 
-				targetRect = GetTextureRect(1 + i, 1);
+				targetRect = spriteSheet.GetTextureRect(1 + i, 1);
 			}
 
 			// получаем тайл из текстуры по ряду и столбцу
 			rectShape.TextureRect = targetRect;
-		}
-
-		// получаем фрагмент текстуры
-		public IntRect GetTextureRect(int i, int j) {
-
-			int x = i * TILE_SIZE + i * 2; // очень странная штука
-			int y = j * TILE_SIZE + j * 2;
-
-			return new IntRect(x, y, TILE_SIZE, TILE_SIZE);
 		}
 
 		public void SetAroundTiles(Tile upTile, Tile downTile, Tile leftTile, Tile rightTile) {
