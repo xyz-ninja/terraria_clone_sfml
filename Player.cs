@@ -64,6 +64,7 @@ namespace TerrariaCloneV2
 			this.startPosition = startPosition;
 
 			Position = startPosition;
+			velocity = new Vector2f();
 		}
 
 		public void Update() {
@@ -71,7 +72,11 @@ namespace TerrariaCloneV2
 			UpdatePhysics();
 			UpdateMovement();
 
-			Position += velocity;
+			Position += movement + velocity;
+
+			if (Position.Y > Program.RenderWindow.Size.Y) {
+				Spawn(this.startPosition);
+			}
 		}
 
 		private void UpdatePhysics() {
@@ -99,6 +104,8 @@ namespace TerrariaCloneV2
 					new Vector2f(Tile.TILE_SIZE, Tile.TILE_SIZE)
 				);
 
+				DebugRenderer.AddRectangle(tileRect, Color.Red);
+
 				isFall = !playerRect.Intersects(tileRect);
 			}
 
@@ -115,16 +122,27 @@ namespace TerrariaCloneV2
 			bool isMove = isMoveLeft || isMoveRight;
 
 			if (isMove) {
+
 				if (isMoveLeft) {
-				
-					movement.X = -horizontalSpeedAcceleration;
+
+					movement.X -= horizontalSpeedAcceleration;
 					Direction = -1;
-				
+
 				} else if (isMoveRight) {
 
-					movement.X = horizontalSpeedAcceleration;
+					movement.X += horizontalSpeedAcceleration;
 					Direction = 1;
 				}
+
+				if (movement.X > horizontalSpeed) {
+					movement.X = horizontalSpeed;
+				} else if (movement.X < -horizontalSpeed) {
+					movement.X = -horizontalSpeed;
+				}
+
+			} else {
+
+				movement.X = 0;
 			}
 		}
 

@@ -25,7 +25,7 @@ namespace TerrariaCloneV2
 		public void GenerateWorld() {
 
 			// трава
-			for (int x = 0; x < 50; x++) {
+			for (int x = 3; x <= 46; x++) {
 				for (int y = 17; y <= 17; y++) {
 
 					CreateTile(TILE_TYPE.GRASS, x, y);
@@ -33,8 +33,22 @@ namespace TerrariaCloneV2
 			}
 
 			// земля
-			for (int x = 0; x < 50; x++) {
+			for (int x = 3; x <= 46; x++) {
 				for (int y = 18; y <= 32; y++) {
+
+					CreateTile(TILE_TYPE.GROUND, x, y);
+				}
+			}
+
+			for (int x = 3; x <= 4; x++) {
+				for (int y = 1; y <= 17; y++) {
+
+					CreateTile(TILE_TYPE.GROUND, x, y);
+				}
+			}
+
+			for (int x = 45; x <= 46; x++) {
+				for (int y = 1; y <= 17; y++) {
 
 					CreateTile(TILE_TYPE.GROUND, x, y);
 				}
@@ -72,6 +86,11 @@ namespace TerrariaCloneV2
 			
 			int X = x / Chunk.CHUNK_SIZE;
 			int Y = y / Chunk.CHUNK_SIZE;
+
+			if (X >= WORLD_SIZE || Y >= WORLD_SIZE) {
+				
+				return null;
+			}
 
 			if (chunks[X][Y] == null) {
 				chunks[X][Y] = new Chunk(new Vector2i(X, Y));

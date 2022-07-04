@@ -37,7 +37,7 @@ namespace TerrariaCloneV2
 			tiles[x][y] = new Tile(type);
 			
 			var tile = tiles[x][y];
-			tile.Position = new Vector2f(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
+			tile.Position = new Vector2f(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE) + Position;
 
 			return tile;
 		}
@@ -54,7 +54,7 @@ namespace TerrariaCloneV2
 
 		public void Draw(RenderTarget target, RenderStates states) {
 
-			states.Transform *= Transform;
+			//states.Transform *= Transform;
 
 			for (int x = 0; x < CHUNK_SIZE; x++) {
 				for (int y = 0; y < CHUNK_SIZE; y++) {
@@ -65,7 +65,7 @@ namespace TerrariaCloneV2
 						continue;
 					}
 
-					target.Draw(tiles[x][y], states);
+					target.Draw(tiles[x][y]);
 				}
 			}
 		}
