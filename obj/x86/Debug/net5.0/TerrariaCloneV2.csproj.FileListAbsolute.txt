@@ -18,3 +18,4 @@ D:\SINDICATO\SFML\SharpProjects\TerrariaCloneVisualStudio\TerrariaCloneV2\Terrar
 D:\SINDICATO\SFML\SharpProjects\TerrariaCloneVisualStudio\TerrariaCloneV2\TerrariaCloneV2\obj\x86\Debug\net5.0\TerrariaCloneV2.genruntimeconfig.cache
 D:\SINDICATO\SFML\SharpProjects\TerrariaCloneVisualStudio\TerrariaCloneV2\TerrariaCloneV2\obj\x86\Debug\net5.0\ref\TerrariaCloneV2.dll
 D:\SINDICATO\SFML\SharpProjects\TerrariaCloneVisualStudio\TerrariaCloneV2\TerrariaCloneV2\bin\x86\Debug\net5.0\ref\TerrariaCloneV2.dll
+D:\SINDICATO\SFML\SharpProjects\TerrariaCloneVisualStudio\TerrariaCloneV2\TerrariaCloneV2\obj\x86\Debug\net5.0\TerrariaCloneV2.csprojAssemblyReference.cache

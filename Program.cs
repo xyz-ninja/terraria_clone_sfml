@@ -12,8 +12,8 @@ namespace TerrariaCloneV2
 		public static Game Game { private set; get; }
 		public static Random Rand { private set; get; }
 
-		static void Main(string[] args) 
-		{
+		static void Main(string[] args) {
+
 			win = new RenderWindow(new SFML.Window.VideoMode(800, 600), "TerrariaClone");
 			win.SetVerticalSyncEnabled(true);
 

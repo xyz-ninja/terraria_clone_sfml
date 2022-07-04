@@ -24,7 +24,7 @@ namespace TerrariaCloneV2
 		// borderSize толщина рамки между фрагментами
 		// texW, texH - ширины/высота всей текстуры
 		public SpriteSheet(int hSize, int vSize, int borderSize, int texW = 0, int texH = 0) {
-			
+
 			if (borderSize > 0) {
 			
 				// для правильной работы алгоритма сразу увеличим толщину рамки на один
@@ -36,8 +36,10 @@ namespace TerrariaCloneV2
 			}
 
 			if (texW != 0 && texH != 0) {
-				subW = texW / hSize;
-				subH = texH / vSize;
+				
+				subW = (int)Math.Ceiling((float)texW / hSize);
+				subH = (int)Math.Ceiling((float)texH / vSize);
+
 			} else {
 				subW = hSize;
 				subH = vSize;

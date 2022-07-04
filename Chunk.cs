@@ -13,8 +13,8 @@ namespace TerrariaCloneV2
 
 		private Tile[][] tiles;
 
-		public Chunk(Vector2i chunkPos)
-		{
+		public Chunk(Vector2i chunkPos) {
+
 			chunkPosition = chunkPos;
 
 			tiles = new Tile[CHUNK_SIZE][];

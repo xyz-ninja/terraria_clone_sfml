@@ -34,8 +34,8 @@ namespace TerrariaCloneV2
 
 		#endregion
 
-		public Tile(TILE_TYPE type) 
-		{
+		public Tile(TILE_TYPE type) {
+
 			tileType = type;
 
 			rectShape = new RectangleShape(new Vector2f(TILE_SIZE, TILE_SIZE));

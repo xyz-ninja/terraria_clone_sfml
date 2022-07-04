@@ -102,6 +102,7 @@ namespace TerrariaCloneV2.Entities
 		}
 
 		private void UpdateWallsCollisions(FloatRect entityRect, int pX, int pY) {
+
 			Tile[] walls = new Tile[] {
 				world.GetTile(pX - 1, pY - 1),
 				world.GetTile(pX - 1, pY - 2),

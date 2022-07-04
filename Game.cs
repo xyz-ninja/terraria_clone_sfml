@@ -11,8 +11,8 @@ namespace TerrariaCloneV2
 
 		private List<NpcSlime> slimes = new List<NpcSlime>();
 
-		public Game() 
-		{
+		public Game() {
+
 			world = new World();
 
 			world.GenerateWorld();

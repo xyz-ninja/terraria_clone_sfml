@@ -11,8 +11,8 @@ namespace TerrariaCloneV2
 
 		Chunk[][] chunks;
 
-		public World()
-		{
+		public World() {
+
 			chunks = new Chunk[WORLD_SIZE][];
 
 			for (int i = 0; i < WORLD_SIZE; i++) {
