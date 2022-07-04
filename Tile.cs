@@ -7,7 +7,8 @@ namespace TerrariaCloneV2
 		NONE, GROUND, GRASS
 	}
 
-	class Tile : Transformable, Drawable {
+	class Tile : Transformable, Drawable 
+	{
 
 		public const int TILE_SIZE = 16;
 
@@ -32,8 +33,8 @@ namespace TerrariaCloneV2
 
 		#endregion
 
-		public Tile(TILE_TYPE type) {
-
+		public Tile(TILE_TYPE type) 
+		{
 			tileType = type;
 
 			rectShape = new RectangleShape(new Vector2f(TILE_SIZE, TILE_SIZE));

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace TerrariaCloneV2
 {
-	class Chunk : Transformable, Drawable {
+	class Chunk : Transformable, Drawable 
+	{
 
 		public const int CHUNK_SIZE = 25;
 
@@ -12,8 +13,8 @@ namespace TerrariaCloneV2
 
 		private Tile[][] tiles;
 
-		public Chunk(Vector2i chunkPos) {
-
+		public Chunk(Vector2i chunkPos)
+		{
 			chunkPosition = chunkPos;
 
 			tiles = new Tile[CHUNK_SIZE][];
