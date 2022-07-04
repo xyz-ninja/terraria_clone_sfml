@@ -69,8 +69,8 @@ namespace TerrariaCloneV2
 
 		public void Update() {
 
-			UpdatePhysics();
 			UpdateMovement();
+			UpdatePhysics();
 
 			Position += movement + velocity;
 
@@ -85,8 +85,13 @@ namespace TerrariaCloneV2
 
 			velocity += new Vector2f(0, 0.15f);
 
+			// проверяем коллизию с тайлом
+			Vector2f nextPosition = Position + velocity - rect.Origin;
+
+			FloatRect playerRect = new FloatRect(nextPosition, rect.Size);
+
 			// ищем тайл игрока
-			
+
 			int pX = (int)((Position.X - rect.Origin.X + rect.Size.X / 2) / Tile.TILE_SIZE);
 			int pY = (int)((Position.Y + rect.Size.Y) / Tile.TILE_SIZE);
 
@@ -94,11 +99,6 @@ namespace TerrariaCloneV2
 
 			if (tile != null) {
 
-				Vector2f nextPosition = Position + velocity - rect.Origin;
-				
-				// проверяем коллизию с тайлом
-
-				FloatRect playerRect = new FloatRect(nextPosition, rect.Size);
 				FloatRect tileRect = new FloatRect(
 					tile.Position,
 					new Vector2f(Tile.TILE_SIZE, Tile.TILE_SIZE)
@@ -111,6 +111,51 @@ namespace TerrariaCloneV2
 
 			if (!isFall) {
 				velocity.Y = 0;
+			}
+
+			UpdateWallsCollisions(playerRect, pX, pY);
+		}
+
+		private void UpdateWallsCollisions(FloatRect playerRect, int pX, int pY) {
+			Tile[] walls = new Tile[] { 
+				world.GetTile(pX - 1, pY - 1),
+				world.GetTile(pX - 1, pY - 2),
+				world.GetTile(pX - 1, pY - 3),
+				world.GetTile(pX + 1, pY - 1),
+				world.GetTile(pX + 1, pY - 2),
+				world.GetTile(pX + 1, pY - 3),
+			};
+
+			foreach (Tile wallTile in walls) {
+				if (wallTile == null) {
+					continue;
+				}
+
+				FloatRect tileRect = new FloatRect(
+					wallTile.Position, 
+					new Vector2f(Tile.TILE_SIZE, Tile.TILE_SIZE)
+				);
+
+				DebugRenderer.AddRectangle(tileRect, Color.Yellow);
+
+				if (playerRect.Intersects(tileRect)) {
+
+					Vector2f offset = new Vector2f(playerRect.Left - tileRect.Left, 0);
+					offset.X /= Math.Abs(offset.X);
+
+					float speed = Math.Abs(movement.X);
+
+					if (offset.X > 0) {
+						
+						movement.X = (tileRect.Left + tileRect.Width) - playerRect.Left;
+						velocity.X = 0;
+
+					} else if (offset.X < 0) {
+
+						movement.X = tileRect.Left - (playerRect.Left + playerRect.Width);
+						velocity.X = 0;
+					}
+				}
 			}
 		}
 
@@ -125,10 +170,19 @@ namespace TerrariaCloneV2
 
 				if (isMoveLeft) {
 
+					// если игрок резко сменил направление движения, убираем инерцию
+					if (movement.X > 0) {
+						movement.X = 0;
+					}
+
 					movement.X -= horizontalSpeedAcceleration;
 					Direction = -1;
 
 				} else if (isMoveRight) {
+
+					if (movement.X < 0) {
+						movement.X = 0;
+					}
 
 					movement.X += horizontalSpeedAcceleration;
 					Direction = 1;
