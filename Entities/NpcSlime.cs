@@ -22,7 +22,7 @@ namespace TerrariaCloneV2.Entities
 
 			rect = new RectangleShape(new Vector2f(spriteSheet.SubWidth / 1.5f, spriteSheet.SubHeight / 1.5f));
 			rect.Origin = new Vector2f(rect.Size.X / 2, 0);
-			rect.FillColor = Color.Green;
+			rect.FillColor = new Color(0, 255, 0, 150);
 
 			rect.Texture = Content.texNpcSlime;
 			rect.TextureRect = spriteSheet.GetTextureRect(0, 0);

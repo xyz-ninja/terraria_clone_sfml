@@ -4,7 +4,7 @@ using SFML.Window;
 using TerrariaCloneV2.Entities;
 using System.Diagnostics;
 
-namespace TerrariaCloneV2
+namespace TerrariaCloneV2.Entities
 {
 	class Player : Entity
 	{
@@ -31,13 +31,19 @@ namespace TerrariaCloneV2
 			rect = new RectangleShape(new Vector2f(Tile.TILE_SIZE * 1.5f, Tile.TILE_SIZE * 2.8f));
 			rect.Origin = new Vector2f(rect.Size.X / 2, 0);
 
+			isRectVisible = false;
+
 			/*rectDirection = new RectangleShape(new Vector2f(50, 3));
 			rectDirection.FillColor = Color.Red;
 			rectDirection.Position = new Vector2f(0, rect.Size.Y / 2 - 1);*/
 
-			animatedSpriteHair = new AnimatedSprite(Content.texPlayerHair, 
+			InitVisual();
+		}
+
+		private void InitVisual() {
+			animatedSpriteHair = new AnimatedSprite(Content.texPlayerHair,
 				new SpriteSheet(
-					1, 14, 0, 
+					1, 14, 0,
 					(int)Content.texPlayerHair.Size.X,
 					(int)Content.texPlayerHair.Size.Y)
 			);
@@ -290,14 +296,33 @@ namespace TerrariaCloneV2
 				}
 
 				if (movement.X > horizontalSpeed) {
+				
 					movement.X = horizontalSpeed;
+				
 				} else if (movement.X < -horizontalSpeed) {
+				
 					movement.X = -horizontalSpeed;
 				}
+
+				animatedSpriteHair.Play("run");
+				animatedSpriteHead.Play("run");
+				animatedSpriteShirt.Play("run");
+				animatedSpriteUndershirt.Play("run");
+				animatedSpriteHands.Play("run");
+				animatedSpriteLegs.Play("run");
+				animatedSpriteShoes.Play("run");
 
 			} else {
 
 				movement.X = 0;
+
+				animatedSpriteHair.Play("idle");
+				animatedSpriteHead.Play("idle");
+				animatedSpriteShirt.Play("idle");
+				animatedSpriteUndershirt.Play("idle");
+				animatedSpriteHands.Play("idle");
+				animatedSpriteLegs.Play("idle");
+				animatedSpriteShoes.Play("idle");
 			}
 		}
 	}

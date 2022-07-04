@@ -11,7 +11,9 @@ namespace TerrariaCloneV2.Entities
 		protected Vector2f movement;
 
 		protected World world;
+
 		protected bool isFly = true;
+		protected bool isRectVisible = true;
 
 		protected Vector2f startPosition;
 
@@ -154,7 +156,9 @@ namespace TerrariaCloneV2.Entities
 		public void Draw(RenderTarget target, RenderStates states) {
 			states.Transform *= Transform;
 
-			target.Draw(rect, states);
+			if (isRectVisible) {
+				target.Draw(rect, states);
+			}
 
 			DrawEntity(target, states);
 		}
