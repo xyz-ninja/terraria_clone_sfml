@@ -1,11 +1,16 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using System;
+using TerrariaCloneV2.Utils;
 
 namespace TerrariaCloneV2.Entities
 {
 	abstract class Entity : Transformable, Drawable
 	{
+		enum DIRECTION_TYPE { 
+			LEFT, RIGHT, UP, DOWN
+		}
+
 		protected RectangleShape rect;
 		protected Vector2f velocity;
 		protected Vector2f movement;
@@ -54,7 +59,7 @@ namespace TerrariaCloneV2.Entities
 			UpdateEntity();
 			UpdatePhysics();
 
-			Position += movement + velocity;
+			//Position += movement + velocity;
 
 			if (Position.Y > Program.RenderWindow.Size.Y) {
 				OnKill();
@@ -63,47 +68,152 @@ namespace TerrariaCloneV2.Entities
 
 		private void UpdatePhysics() {
 
-			bool isFall = true;
-
 			//velocity += new Vector2f(0, 0.15f);
 			velocity.X *= 0.99f;
 
 			// гравитация
-			velocity.Y += 0.25f;
+			velocity.Y += 0.55f;
+
+			var offset = velocity + movement;
+
+			// расстояние между текущей и будущей позицией
+			float dist = MathUtils.GetDistance(offset);
+
+			int countStep = 1; // количество "теневых" копий
+			float stepSize = (float)Tile.TILE_SIZE / 2;
+			if (dist > stepSize) {
+				countStep = (int)(dist / stepSize); // mb Mathf.Floor
+			}
 
 			// проверяем коллизию с тайлом
-			Vector2f nextPosition = Position + velocity - rect.Origin;
+			Vector2f nextPosition = Position + offset;
+			Vector2f stepPosition = Position - rect.Origin;
 
-			FloatRect entityRect = new FloatRect(nextPosition, rect.Size);
+			FloatRect stepRect = new FloatRect(stepPosition, rect.Size);
 
-			// ищем тайл игрока
+			// вектор "смещения", для получение координат следующего шага проверки коллизии
+			// TODO: это stepOffset, автор скумбрия ебанная
+			Vector2f stepsOffset = (nextPosition - Position) / countStep;
 
-			int pX = (int)((Position.X - rect.Origin.X + rect.Size.X / 2) / Tile.TILE_SIZE);
-			int pY = (int)((Position.Y + rect.Size.Y) / Tile.TILE_SIZE);
+			for (int step = 0; step < countStep; step++) {
 
-			Tile tile = world.GetTile(pX, pY);
+				bool isBreakStep = false;
 
-			if (tile != null) {
+				stepPosition += stepsOffset;
+				stepRect = new FloatRect(stepPosition, rect.Size);
 
-				FloatRect tileRect = new FloatRect(
-					tile.Position,
-					new Vector2f(Tile.TILE_SIZE, Tile.TILE_SIZE)
-				);
+				DebugRenderer.AddRectangle(stepRect, Color.Blue);
 
-				DebugRenderer.AddRectangle(tileRect, Color.Red);
+				// ищем текущий тайл
 
-				isFall = entityRect.Intersects(tileRect) == false;
-				isFly = isFall;
+				int i = (int)((stepPosition.X + rect.Size.X / 2) / Tile.TILE_SIZE);
+				int j = (int)((stepPosition.Y + rect.Size.Y) / Tile.TILE_SIZE);
+
+				Tile tile = world.GetTile(i, j);
+
+				if (tile != null) {
+
+					FloatRect entityRect = new FloatRect(
+						tile.Position,
+						new Vector2f(Tile.TILE_SIZE, Tile.TILE_SIZE)
+					);
+
+					DebugRenderer.AddRectangle(entityRect, Color.Red);
+
+					if (UpdateCollision(stepRect, entityRect, DIRECTION_TYPE.DOWN, ref stepPosition)) {
+					
+						velocity.Y = 0;
+						isFly = false;
+						isBreakStep = true;
+					
+					} else {
+
+						isFly = true;
+					}
+
+				} else {
+
+					isFly = true;
+				}
+
+				// -1 => левая стенка
+				// 1 => правая стенка
+				if (UpdateWallCollision(i, j, -1, ref stepPosition, stepRect) ||
+					UpdateWallCollision(i, j, 1, ref stepPosition, stepRect)) {
+
+					OnWallCollided();
+					isBreakStep = true;
+				}
+
+				if (isBreakStep) {
+					break;
+				}
 			}
 
-			if (!isFall) {
-				velocity.Y = 0;
-			}
-
-			UpdateWallsCollisions(entityRect, pX, pY);
+			Position = stepPosition + rect.Origin;
 		}
 
-		private void UpdateWallsCollisions(FloatRect entityRect, int pX, int pY) {
+		// iOffset - смещение плитки по горизонтали
+		private bool UpdateWallCollision(int i, int j, int iOffset, ref Vector2f stepPos, FloatRect stepRect) {
+			
+			var dirType = iOffset > 0 ? DIRECTION_TYPE.RIGHT : DIRECTION_TYPE.LEFT;
+
+			Tile[] walls = new Tile[] {
+				world.GetTile(i + iOffset, j - 1),
+				world.GetTile(i + iOffset, j - 2),
+				world.GetTile(i + iOffset, j - 3),
+			};
+
+			bool isWallCollided = false;
+			foreach(Tile tile in walls) {
+				
+				if (tile == null) {
+					continue;
+				}
+
+				FloatRect tileRect = new FloatRect(
+					tile.Position, new Vector2f(Tile.TILE_SIZE, Tile.TILE_SIZE));
+
+
+				DebugRenderer.AddRectangle(tileRect, Color.Yellow);
+				if (UpdateCollision(stepRect, tileRect, dirType, ref stepPos)) {
+					isWallCollided = true;
+					break; /// ?????
+				}
+			}
+
+			return isWallCollided;
+		}
+
+		// проверяет пересечение двух прямоугольник и корректирует позицию
+		private bool UpdateCollision(FloatRect rectEntity, FloatRect rectTile, DIRECTION_TYPE dirType, ref Vector2f pos) {
+			if (rectEntity.Intersects(rectTile)) {
+				
+				switch (dirType) {
+					case DIRECTION_TYPE.UP:
+						pos = new Vector2f(pos.X, rectTile.Top + rectTile.Height - 1);
+						break;
+					
+					case DIRECTION_TYPE.DOWN:
+						pos = new Vector2f(pos.X, rectTile.Top - rectEntity.Height + 1);
+						break;
+
+					case DIRECTION_TYPE.LEFT:
+						pos = new Vector2f(rectTile.Left + rectTile.Width - 1, pos.Y);
+						break;
+
+					case DIRECTION_TYPE.RIGHT:
+						pos = new Vector2f(rectTile.Left - rectEntity.Width + 1, pos.Y);
+						break;
+				}
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/*private void UpdateWallsCollisions(FloatRect entityRect, int pX, int pY) {
 
 			Tile[] walls = new Tile[] {
 				world.GetTile(pX - 1, pY - 1),
@@ -151,7 +261,7 @@ namespace TerrariaCloneV2.Entities
 					OnWallCollided();
 				}
 			}
-		}
+		}*/
 
 		public void Draw(RenderTarget target, RenderStates states) {
 			states.Transform *= Transform;

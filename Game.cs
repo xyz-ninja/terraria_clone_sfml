@@ -21,7 +21,7 @@ namespace TerrariaCloneV2
 			player = new Player(world);
 			player.Spawn(new Vector2f(300, 150));
 
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 50; i++) {
 				var slime = new NpcSlime(world);
 
 				slime.Direction = Program.Rand.Next(0, 2) == 0 ? 1 : -1;

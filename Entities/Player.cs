@@ -268,10 +268,15 @@ namespace TerrariaCloneV2.Entities
 
 		private void UpdateMovement() {
 
-			bool isMoveLeft = Keyboard.IsKeyPressed(Keyboard.Key.A);
-			bool isMoveRight = Keyboard.IsKeyPressed(Keyboard.Key.D);
+			bool isMoveLeft = Keyboard.IsKeyPressed(Keyboard.Key.A) || Keyboard.IsKeyPressed(Keyboard.Key.Left);
+			bool isMoveRight = Keyboard.IsKeyPressed(Keyboard.Key.D) || Keyboard.IsKeyPressed(Keyboard.Key.Right);
+			bool isJump = Keyboard.IsKeyPressed(Keyboard.Key.Space) || Keyboard.IsKeyPressed(Keyboard.Key.W);
 
 			bool isMove = isMoveLeft || isMoveRight;
+
+			if (isJump && isFly == false) {
+				velocity.Y = -6;
+			}
 
 			if (isMove) {
 

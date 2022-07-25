@@ -6,7 +6,6 @@ namespace TerrariaCloneV2.Entities
 {
 	class NpcSlime : Entity
 	{
-
 		private SpriteSheet spriteSheet;
 
 		private float waitTimer = 0;
@@ -22,7 +21,9 @@ namespace TerrariaCloneV2.Entities
 
 			rect = new RectangleShape(new Vector2f(spriteSheet.SubWidth / 1.5f, spriteSheet.SubHeight / 1.5f));
 			rect.Origin = new Vector2f(rect.Size.X / 2, 0);
-			rect.FillColor = new Color(0, 255, 0, 150);
+			
+			//rect.FillColor = new Color(0, 255, 0, 150);
+			rect.FillColor = new Color(0, 255, 0, 40);
 
 			rect.Texture = Content.texNpcSlime;
 			rect.TextureRect = spriteSheet.GetTextureRect(0, 0);
@@ -43,7 +44,7 @@ namespace TerrariaCloneV2.Entities
 			if (isFly == false) {
 
 				if (waitTimer >= waitTime) {
-					velocity = new Vector2f(Direction * Program.Rand.Next(1, 10), -Program.Rand.Next(6, 9));
+					velocity = new Vector2f(Direction * Program.Rand.Next(5, 20), -Program.Rand.Next(6, 9));
 
 					waitTimer = 0;
 				
