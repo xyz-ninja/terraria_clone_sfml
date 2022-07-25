@@ -44,7 +44,7 @@ namespace TerrariaCloneV2.Entities
 			if (isFly == false) {
 
 				if (waitTimer >= waitTime) {
-					velocity = new Vector2f(Direction * Program.Rand.Next(5, 20), -Program.Rand.Next(6, 9));
+					velocity = GetJumpVelocity();
 
 					waitTimer = 0;
 				
@@ -63,6 +63,10 @@ namespace TerrariaCloneV2.Entities
 
 		public override void DrawEntity(RenderTarget target, RenderStates states) {
 			//throw new NotImplementedException();
+		}
+
+		public virtual Vector2f GetJumpVelocity() {
+			return new Vector2f(Direction * Program.Rand.Next(3, 13), -Program.Rand.Next(3, 5));
 		}
 	}
 }
